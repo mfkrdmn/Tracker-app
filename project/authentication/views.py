@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 
 # Create your views here.
-
 class RegistrationView(View):
     def get(self,request):
         return render(request, "register.html")
