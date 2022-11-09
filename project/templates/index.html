@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <div class="container mt-5"></div>
     <div class="row">
@@ -26,14 +26,29 @@
             <a href="{% url 'addexpense' %}" class="btn btn-primary">Add expense</a>
         </div>
 
+        <!--search start-->
+
         <div class="container">
+
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4">
+          
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="searchField" placeholder="Search">
+                  </div>
+                </div>
+              </div>
+          <div class="app-table">
+
+        <!--search end-->
 
             {% if expenses.count %}
 
             <table class="table table-stripped table hover">
                 <thead>
                     <tr>
-                        <th>Amount ($)</th>
+                        <th>Amount ({{currency}})</th>
                         <th>Category</th>
                         <th>Description</th>
                         <th>Date</th>
@@ -81,8 +96,11 @@
             </div>
         </div>
 
-       
-
+    
     </div>
 </div>
+
+<script src="{% static 'js/searchExpenses.js' %}"></script>
+
+
 {% endblock %}

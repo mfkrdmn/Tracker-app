@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Category, Expense
-# Create your views here.
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
@@ -9,6 +8,17 @@ import json
 from django.http import JsonResponse
 from userpreferences.models import UserPreference
 import datetime
+
+def search_expenses(request):
+    if request.method == 'POST':
+        search_str = json.loads(request.body).get('searchText')
+        expenses = Expense.objects.filter(
+            amount__istartswith=search_str, owner=request.user) | Expense.objects.filter(
+            date__istartswith=search_str, owner=request.user) | Expense.objects.filter(
+            description__icontains=search_str, owner=request.user) | Expense.objects.filter(
+            category__icontains=search_str, owner=request.user)
+        data = expenses.values()
+        return JsonResponse(list(data), safe=False)
 
 
 @login_required(login_url='/login')
@@ -35,23 +45,23 @@ def add_expense(request):
         'values': request.POST #bunu html ve burada koymazsak biri eksik submit edildiğinde yazılan veriyi de
         #siliyor
     }
+
     if request.method == 'GET':
         return render(request, 'addexpense.html', context)
 
     if request.method == 'POST':
         amount = request.POST['amount']
-
-        if not amount: #that means user didnt submşt amount
-            messages.error(request, 'Amount is required')
-            return render(request, 'addexpense.html', context)
         description = request.POST['description'] 
         date = request.POST['expense_date']
         category = request.POST['category']
 
-        if not description: #that means user didnt submşt description
-            messages.error(request, 'Description is required')
+        if not amount: #that means user didnt submit amount
+            messages.error(request, 'Amount is required')
             return render(request, 'addexpense.html', context)
 
+        if not description: #that means user didnt submit description
+            messages.error(request, 'Description is required')
+            return render(request, 'addexpense.html', context)
 
         Expense.objects.create(owner=request.user, amount=amount, date=date,
                                category=category, description=description)
@@ -70,6 +80,7 @@ def expense_edit(request, id):
     }
     if request.method == 'GET':
         return render(request, 'edit-expense.html', context)
+        
     if request.method == 'POST':
         amount = request.POST['amount']
 
