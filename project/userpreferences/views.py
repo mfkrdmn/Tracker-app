@@ -24,7 +24,7 @@ def index(request):
 
         return render(request, 'preferencesIndex.html', {'currencies': currency_data,
                                                           'user_preferences': user_preferences})
-    else:
+    else: #request.method == 'POST':
         
         currency = request.POST['currency']
         if exists:

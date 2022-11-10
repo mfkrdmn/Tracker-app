@@ -43,7 +43,7 @@
 
         <!--search end-->
 
-            {% if expenses.count %}
+            {% if expenses.count %} <!--eger expenses varsa asagidaki elemanlari goster-->
 
             <table class="table table-stripped table hover">
                 <thead>
@@ -57,7 +57,7 @@
 
                 <tbody>
 
-                    {% for i in page_obj %}
+                    {% for i in page_obj %} <!--Burada ic ice gecmis yapi var.page_obj yapisi expenses i paginator ile gosteriyor(views e bak)-->
                     
                     <tr>
                         <td>{{i.amount}}</td>

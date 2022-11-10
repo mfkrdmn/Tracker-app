@@ -80,16 +80,16 @@ def expense_edit(request, id):
     }
     if request.method == 'GET':
         return render(request, 'edit-expense.html', context)
-        
+
     if request.method == 'POST':
         amount = request.POST['amount']
+        description = request.POST['description']
+        date = request.POST['expense_date']
+        category = request.POST['category']
 
         if not amount:
             messages.error(request, 'Amount is required')
             return render(request, 'edit-expense.html', context)
-        description = request.POST['description']
-        date = request.POST['expense_date']
-        category = request.POST['category']
 
         if not description:
             messages.error(request, 'description is required')
@@ -97,7 +97,7 @@ def expense_edit(request, id):
 
         expense.owner = request.user
         expense.amount = amount
-        expense. date = date
+        expense.date = date
         expense.category = category
         expense.description = description
 
